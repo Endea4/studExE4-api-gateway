@@ -1,7 +1,7 @@
 services:
   api-gateway:
     image: golang:1.22-alpine
-    working_dir: /app/api-gateway
+    working_dir: /app
     volumes:
       - .:/app
     ports:
@@ -20,9 +20,9 @@ services:
 
   user-service:
     image: golang:1.22-alpine
-    working_dir: /app/services/user-service
+    working_dir: /app
     volumes:
-      - .:/app
+      - ../studExE4-user-service:/app
     ports:
       - "9081:9081"
     environment:
@@ -34,9 +34,9 @@ services:
 
   driver-service:
     image: golang:1.22-alpine
-    working_dir: /app/services/driver-service
+    working_dir: /app
     volumes:
-      - .:/app
+      - ../studExE4-driver-service:/app
     ports:
       - "9082:9082"
     environment:
