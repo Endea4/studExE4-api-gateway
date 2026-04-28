@@ -1,0 +1,47 @@
+services:
+  api-gateway:
+    image: golang:1.22-alpine
+    working_dir: /app/api-gateway
+    volumes:
+      - .:/app
+    ports:
+      - "9080:9080"
+    environment:
+      - GOTOOLCHAIN=auto
+      - PORT=9080
+      - MONGODB_URI=${MONGODB_URI:-mongodb+srv://StudExE4:c9p5au8naa@studexe4-cl.jjf5zhw.mongodb.net/?appName=studExE4-cl}
+      - DB_NAME=studexdb
+      - USER_SERVICE_URL=http://user-service:9081
+      - DRIVER_SERVICE_URL=http://driver-service:9082
+    command: go run cmd/main.go
+    depends_on:
+      - user-service
+      - driver-service
+
+  user-service:
+    image: golang:1.22-alpine
+    working_dir: /app/services/user-service
+    volumes:
+      - .:/app
+    ports:
+      - "9081:9081"
+    environment:
+      - GOTOOLCHAIN=auto
+      - USER_SERVICE_PORT=9081
+      - MONGODB_URI=${MONGODB_URI:-mongodb+srv://StudExE4:c9p5au8naa@studexe4-cl.jjf5zhw.mongodb.net/?appName=studExE4-cl}
+      - DB_NAME=studexdb
+    command: go run cmd/server/main.go
+
+  driver-service:
+    image: golang:1.22-alpine
+    working_dir: /app/services/driver-service
+    volumes:
+      - .:/app
+    ports:
+      - "9082:9082"
+    environment:
+      - GOTOOLCHAIN=auto
+      - DRIVER_SERVICE_PORT=9082
+      - MONGODB_URI=${MONGODB_URI:-mongodb+srv://StudExE4:c9p5au8naa@studexe4-cl.jjf5zhw.mongodb.net/?appName=studExE4-cl}
+      - DB_NAME=studexdb
+    command: go run cmd/server/main.go
