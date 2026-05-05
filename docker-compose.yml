@@ -1,15 +1,43 @@
 services:
+  user-service:
+    image: golang:alpine
+    working_dir: /app
+    volumes:
+      - ../studExE4-user-service:/app
+    ports:
+      - "9081:9081"
+    environment:
+      - USER_SERVICE_PORT=9081
+      - MONGODB_URI=mongodb+srv://StudExE4:c9p5au8naa@studexe4-cl.jjf5zhw.mongodb.net/
+      - DB_NAME=studexdb_users
+    command: go run cmd/server/main.go
+
+  driver-service:
+    image: golang:alpine
+    working_dir: /app
+    volumes:
+      - ../studExE4-driver-service:/app
+    ports:
+      - "9082:9082"
+    environment:
+      - DRIVER_SERVICE_PORT=9082
+      - MONGODB_URI=mongodb+srv://StudExE4:c9p5au8naa@studexe4-cl.jjf5zhw.mongodb.net/
+      - DB_NAME=studexdb_drivers
+      - USER_SERVICE_URL=http://user-service:9081
+    command: go run cmd/server/main.go
+    depends_on:
+      - user-service
+
   api-gateway:
-    image: golang:1.22-alpine
+    image: golang:alpine
     working_dir: /app
     volumes:
       - .:/app
     ports:
       - "9080:9080"
     environment:
-      - GOTOOLCHAIN=auto
       - PORT=9080
-      - MONGODB_URI=${MONGODB_URI:-mongodb+srv://StudExE4:c9p5au8naa@studexe4-cl.jjf5zhw.mongodb.net/?appName=studExE4-cl}
+      - MONGODB_URI=mongodb+srv://StudExE4:c9p5au8naa@studexe4-cl.jjf5zhw.mongodb.net/
       - DB_NAME=studexdb
       - USER_SERVICE_URL=http://user-service:9081
       - DRIVER_SERVICE_URL=http://driver-service:9082
@@ -18,30 +46,15 @@ services:
       - user-service
       - driver-service
 
-  user-service:
-    image: golang:1.22-alpine
+  customer-bot:
+    image: golang:latest
     working_dir: /app
     volumes:
-      - ../studExE4-user-service:/app
-    ports:
-      - "9081:9081"
+      - ../studExE4-customer-bot:/app
+    stdin_open: true
+    tty: true
     environment:
-      - GOTOOLCHAIN=auto
-      - USER_SERVICE_PORT=9081
-      - MONGODB_URI=${MONGODB_URI:-mongodb+srv://StudExE4:c9p5au8naa@studexe4-cl.jjf5zhw.mongodb.net/?appName=studExE4-cl}
-      - DB_NAME=studexdb
-    command: go run cmd/server/main.go
-
-  driver-service:
-    image: golang:1.22-alpine
-    working_dir: /app
-    volumes:
-      - ../studExE4-driver-service:/app
-    ports:
-      - "9082:9082"
-    environment:
-      - GOTOOLCHAIN=auto
-      - DRIVER_SERVICE_PORT=9082
-      - MONGODB_URI=${MONGODB_URI:-mongodb+srv://StudExE4:c9p5au8naa@studexe4-cl.jjf5zhw.mongodb.net/?appName=studExE4-cl}
-      - DB_NAME=studexdb
-    command: go run cmd/server/main.go
+      - API_GATEWAY_URL=http://api-gateway:9080
+    command: go run cmd/main.go
+    depends_on:
+      - api-gateway

@@ -56,6 +56,9 @@ func main() {
 	r.Any("/drivers/*path", ReverseProxy(driverServiceURL))
 	r.Any("/drivers", ReverseProxy(driverServiceURL))
 
+	r.Any("/admin/*path", ReverseProxy(driverServiceURL))
+	r.Any("/admin", ReverseProxy(driverServiceURL))
+
 	port := config.GetEnv("PORT", "8080")
 	fmt.Printf("API Gateway starting on port %s...\n", port)
 	r.Run(":" + port)
