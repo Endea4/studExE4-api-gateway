@@ -6,7 +6,7 @@ info:
 
 servers:
   - url: http://localhost:9080
-    description: API Gateway
+    description: Direct (api-gateway)
 
 tags:
   - name: Gateway

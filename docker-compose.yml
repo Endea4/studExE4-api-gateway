@@ -28,6 +28,24 @@ services:
     depends_on:
       - user-service
 
+  trip-service:
+    image: golang:alpine
+    working_dir: /app
+    volumes:
+      - ../studExE4-trip-service:/app
+    ports:
+      - "9083:9083"
+    environment:
+      - TRIP_SERVICE_PORT=9083
+      - MONGODB_URI=${MONGODB_URI}
+      - DB_NAME=studexdb_orders
+      - USER_SERVICE_URL=http://user-service:9081
+      - DRIVER_SERVICE_URL=http://driver-service:9082
+    command: go run cmd/server/main.go
+    depends_on:
+      - user-service
+      - driver-service
+
   api-gateway:
     image: golang:alpine
     working_dir: /app
@@ -41,10 +59,12 @@ services:
       - DB_NAME=studexdb
       - USER_SERVICE_URL=http://user-service:9081
       - DRIVER_SERVICE_URL=http://driver-service:9082
+      - TRIP_SERVICE_URL=http://trip-service:9083
     command: go run cmd/main.go
     depends_on:
       - user-service
       - driver-service
+      - trip-service
 
   customer-bot:
     image: golang:latest
