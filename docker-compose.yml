@@ -67,5 +67,8 @@ services:
       URLS: '[{"url":"/spec/openapi-user-service.yaml","name":"User Service"},{"url":"/spec/openapi-driver-service.yaml","name":"Driver Service + Admin"},{"url":"/spec/openapi-bot.yaml","name":"Customer Bot"},{"url":"/spec/openapi-gateway.yaml","name":"API Gateway"}]'
       URLS_PRIMARY_NAME: "User Service"
     volumes:
-      - ../api-test:/usr/share/nginx/html/spec
+      - ../studExE4-user-service/docs/openapi.yaml:/usr/share/nginx/html/spec/openapi-user-service.yaml
+      - ../studExE4-driver-service/docs/openapi.yaml:/usr/share/nginx/html/spec/openapi-driver-service.yaml
+      - ../studExE4-customer-bot/docs/openapi.yaml:/usr/share/nginx/html/spec/openapi-bot.yaml
+      - ./docs/openapi.yaml:/usr/share/nginx/html/spec/openapi-gateway.yaml
 

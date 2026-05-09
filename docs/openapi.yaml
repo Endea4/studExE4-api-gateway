@@ -1,0 +1,45 @@
+openapi: "3.0.3"
+info:
+  title: API Gateway
+  description: Entry point — proxies requests to user-service and driver-service
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:9080
+    description: API Gateway
+
+tags:
+  - name: Gateway
+    description: Health check
+
+paths:
+  /:
+    get:
+      tags: [Gateway]
+      summary: Health check
+      responses:
+        "200":
+          description: Gateway is running
+          content:
+            application/json:
+              example:
+                service: api-gateway
+                status: running
+
+  /users:
+    any:
+      tags: [Gateway]
+      summary: Proxy → user-service
+      description: All requests to /users/* are forwarded to user-service on port 9081.
+
+  /drivers:
+    any:
+      tags: [Gateway]
+      summary: Proxy → driver-service
+      description: All requests to /drivers/* are forwarded to driver-service on port 9082.
+
+  /admin:
+    any:
+      tags: [Gateway]
+      summary: Proxy → driver-service
+      description: All requests to /admin/* are forwarded to driver-service on port 9082.
