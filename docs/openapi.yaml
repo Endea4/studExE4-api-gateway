@@ -1,7 +1,7 @@
 openapi: "3.0.3"
 info:
   title: API Gateway
-  description: Entry point — proxies requests to user-service and driver-service
+  description: Entry point — proxies requests to user-service, driver-service, and trip-service
   version: "1.0.0"
 
 servers:
@@ -43,3 +43,9 @@ paths:
       tags: [Gateway]
       summary: Proxy → driver-service
       description: All requests to /admin/* are forwarded to driver-service on port 9082.
+
+  /orders:
+    any:
+      tags: [Gateway]
+      summary: Proxy → trip-service
+      description: All requests to /orders/* are forwarded to trip-service on port 9083.

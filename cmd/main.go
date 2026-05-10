@@ -78,6 +78,10 @@ func main() {
 	r.Any("/admin/*path", ReverseProxy(driverServiceURL))
 	r.Any("/admin", ReverseProxy(driverServiceURL))
 
+	tripServiceURL := config.GetEnv("TRIP_SERVICE_URL", "http://localhost:8083")
+	r.Any("/orders/*path", ReverseProxy(tripServiceURL))
+	r.Any("/orders", ReverseProxy(tripServiceURL))
+
 	port := config.GetEnv("PORT", "8080")
 	fmt.Printf("API Gateway starting on port %s...\n", port)
 	r.Run(":" + port)
