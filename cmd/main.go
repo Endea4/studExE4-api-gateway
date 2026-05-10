@@ -82,6 +82,10 @@ func main() {
 	r.Any("/orders/*path", ReverseProxy(tripServiceURL))
 	r.Any("/orders", ReverseProxy(tripServiceURL))
 
+	customerBotURL := config.GetEnv("CUSTOMER_BOT_URL", "http://localhost:9084")
+	r.Any("/callback/*path", ReverseProxy(customerBotURL))
+	r.Any("/callback", ReverseProxy(customerBotURL))
+
 	port := config.GetEnv("PORT", "8080")
 	fmt.Printf("API Gateway starting on port %s...\n", port)
 	r.Run(":" + port)

@@ -41,6 +41,7 @@ services:
       - DB_NAME=studexdb_orders
       - USER_SERVICE_URL=http://user-service:9081
       - DRIVER_SERVICE_URL=http://driver-service:9082
+      - CALLBACK_URL=http://api-gateway:9080/callback/order-accepted
     command: go run cmd/server/main.go
     depends_on:
       - user-service
@@ -60,6 +61,7 @@ services:
       - USER_SERVICE_URL=http://user-service:9081
       - DRIVER_SERVICE_URL=http://driver-service:9082
       - TRIP_SERVICE_URL=http://trip-service:9083
+      - CUSTOMER_BOT_URL=http://customer-bot:9084
     command: go run cmd/main.go
     depends_on:
       - user-service
@@ -75,6 +77,7 @@ services:
     tty: true
     environment:
       - API_GATEWAY_URL=http://api-gateway:9080
+      - CALLBACK_PORT=9084
     command: go run cmd/main.go
     depends_on:
       - api-gateway

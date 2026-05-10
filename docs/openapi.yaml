@@ -49,3 +49,9 @@ paths:
       tags: [Gateway]
       summary: Proxy → trip-service
       description: All requests to /orders/* are forwarded to trip-service on port 9083.
+
+  /callback:
+    any:
+      tags: [Gateway]
+      summary: Proxy → customer-bot
+      description: Internal callback routes forwarded to customer-bot on port 9084. Used by trip-service to notify the bot when a driver accepts an order.
