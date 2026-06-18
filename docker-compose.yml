@@ -1,0 +1,15 @@
+services:
+  api-gateway:
+    build: .
+    container_name: studexe4-api-gateway
+    ports:
+      - "9080:9080"
+    env_file:
+      - .env.example
+    networks:
+      - studex-net
+    restart: unless-stopped
+
+networks:
+  studex-net:
+    driver: bridge
