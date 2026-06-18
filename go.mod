@@ -3,7 +3,7 @@ module github.com/Endea4/studExE4-api-gateway
 go 1.25.0
 
 require (
-	github.com/Endea4/studExE4-shared v0.0.0-00010101000000-000000000000
+	github.com/Endea4/studExE4-shared v1.0.0
 	github.com/gin-gonic/gin v1.12.0
 	github.com/google/uuid v1.6.0
 	github.com/swaggo/files v1.0.1
@@ -57,5 +57,3 @@ require (
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
-
-replace github.com/Endea4/studExE4-shared => ../studExE4-shared
